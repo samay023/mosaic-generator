@@ -74,8 +74,8 @@ export const getBestDimensionForImage = (
   imageHeight: number,
   imageWidth: number
 ) => {
-  const maxHeight = tileHeight > 30 ? tileHeight * 20 : tileHeight * 30;
-  const maxWidth = tileWidth > 30 ? tileWidth * 20 : tileWidth * 30;
+  const maxHeight = tileHeight * 50;
+  const maxWidth = tileWidth * 50;
 
   return {
     height: getBestPossibleImageSizeUnit(imageHeight, maxHeight, tileHeight),
