@@ -15,6 +15,14 @@ The goal of this task is to implement the following flow in a Next.js applicatio
 
 ## Setup
 
+```bash
+# install the dependecies
+npm install
+
+# Run dev copy
+npm run dev
+```
+
 ### Prerequisites
 
 - [Yarn](https://yarnpkg.com/lang/en/docs/install/#mac-tab)
