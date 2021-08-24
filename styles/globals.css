@@ -1,0 +1,14 @@
+@tailwind base;
+
+@layer base {
+    body {
+        @apply subpixel-antialiased
+    },
+    p {
+        @apply p-4
+    }
+};
+
+@tailwind components;
+
+@tailwind utilities;
