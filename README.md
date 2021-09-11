@@ -20,4 +20,3 @@ The goal of this task is to implement the following flow in a Next.js applicatio
 
 # Run dev copy
 `npm run dev`
-```
