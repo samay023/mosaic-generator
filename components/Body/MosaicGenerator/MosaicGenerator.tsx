@@ -1,58 +1,39 @@
-import React, { useState } from 'react';
-import ImageCanvas from './ImageCanvas';
+import React, { useEffect, useRef, useState } from 'react';
+import { useMosaic } from '../../../hooks/generateMosaic';
+import { scaleAndConvertToImageElement } from '../../../imageProcess';
+import ImageDisplay from './ImageDisplay';
 import ImagePicker from './ImagePicker';
 import MosaicImage from './MosaicImage';
 
 const MosaicGenerator = () => {
-  const [image, setImageDetails] = useState({
-    src: '',
-  });
+  const [image, setImage] = useState<HTMLImageElement>();
 
-  const imageEventHandler: ImageEventHandler = (evt) => {
-    if (evt.target?.files?.length > 0) {
-      setImageDetails({
-        src: URL.createObjectURL(evt.target.files[0]),
+  const imageHandler = async (image: File) => {
+    createImageBitmap(image)
+      .then(scaleAndConvertToImageElement)
+      .then((image) => {
+        setImage(image);
       });
-    } else {
-      // Didnt select an image
-      setImageDetails({
-        src: '',
-      });
-    }
   };
 
-  const [averageHexCodeDimensionsPerRow, setAverageHexCodeWithDimensions] = useState<
-    HexCodeWithDimension[][]
-  >([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { startGenerating } = useMosaic(canvasRef);
 
-  const averageHexCodeDimensionHandler: AverageHexCodeDimensionHandler = (newResult) =>
-    setAverageHexCodeWithDimensions(newResult);
-
-  const resetHexCodeDimensionHandler = () => setAverageHexCodeWithDimensions([]);
+  useEffect(() => {
+    if (image) {
+      startGenerating(image);
+    }
+  }, [image, startGenerating]);
 
   return (
     <div className="space-y-3">
-      <ImagePicker onChange={imageEventHandler} />
+      <ImagePicker onChange={imageHandler} />
 
-      <p>Actual Image</p>
-      {image.src && <img src={image.src} />}
-
-      {/* For testing only */}
-      <p>Resized Image for getting the average color</p>
-      {image.src && (
-          <ImageCanvas
-            src={image.src}
-            setHexCodeWithDimension={averageHexCodeDimensionHandler}
-            resetHexCodeDimensions={resetHexCodeDimensionHandler}
-          />
-      )}
-
-      <p>The generated photomosaic using the average color in each tile</p>
-      {/* {averageHexCodeDimensions.length > 0 && (
-        <PhotoMosaicImage hexCodeWithDimensions={averageHexCodeDimensions} />
-      )} */}
-      {averageHexCodeDimensionsPerRow.length > 0 && (
-        <MosaicImage hexCodesWithDimensionsForEachRow={averageHexCodeDimensionsPerRow} />
+      {image && (
+        <div className="flex flex-row p-1 gap-x-3">
+          <ImageDisplay image={image} />
+          <MosaicImage ref={canvasRef} image={image} />
+        </div>
       )}
     </div>
   );

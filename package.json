@@ -18,7 +18,8 @@
     "fastify-helmet": "^5.3.2",
     "next": "^11.1.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-dropzone": "^11.3.4"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.2.1",
@@ -28,6 +29,7 @@
     "@types/jest": "^27.0.1",
     "@types/node": "^16.6.1",
     "@types/react": "^17.0.18",
+    "@types/react-dom": "^17.0.9",
     "autoprefixer": "^10.3.1",
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",

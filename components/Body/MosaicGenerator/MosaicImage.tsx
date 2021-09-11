@@ -1,32 +1,24 @@
-import { useEffect, useMemo, useState } from 'react';
+import { ForwardedRef, forwardRef } from 'react';
 
-const MosaicImage = ({ hexCodesWithDimensionsForEachRow }: MosaicImageProps) => {
+interface MosaicImageProps {
+  image: HTMLImageElement;
+}
 
-  // Memoized version to cache the jsx element if the hex color codes are repeated
-  const createImage = (hexColorCode: string) =>
-    useMemo(
-      () => (
-        <>
-          <img src={`${process.cwd()}api/colour/${hexColorCode}`} />
-        </>
-      ),
-      [hexColorCode]
-    );
-
-  const createImagesForRow = (hexCodeForRow: HexCodeWithDimension[]) => {
-    const images = hexCodeForRow.map((hexCodeWithDimension) =>
-      createImage(hexCodeWithDimension.hexColorCode)
-    );
-
-    return (<div className="flex flex-flow-col gap-0">{images}</div>);
-  };
-  return (
-    <>
-      <div className="p-0 align-baseline">
-        {hexCodesWithDimensionsForEachRow.map(createImagesForRow)}
+const MosaicImage = forwardRef(
+  ({ image }: MosaicImageProps, canvasRef: ForwardedRef<HTMLCanvasElement>) => {
+    return (
+      <div className="p-1 border-2 border-yellow-500 border-solid">
+        <canvas
+          ref={canvasRef}
+          className="mr-auto ml-auto"
+          width={image.width+5}
+          height={image.height+5}
+        />
       </div>
-    </>
-  );
-};
+    );
+  }
+);
+
+MosaicImage.displayName = 'MosaicImage';
 
 export default MosaicImage;

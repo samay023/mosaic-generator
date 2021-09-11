@@ -4,7 +4,7 @@ import MosaicGenerator from './MosaicGenerator/MosaicGenerator';
 
 const Body = () => {
   return (
-    <div>
+    <div className="flex-col w-4/5">
       <Content />
       <MosaicGenerator />
     </div>

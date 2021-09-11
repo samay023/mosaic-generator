@@ -17,7 +17,6 @@ function Homepage(): JSX.Element {
      
       <Header/>
       <Body/>
-      {/* <MosaicRenderer tileHeight={+TILE_HEIGHT} tileWidth={+TILE_WIDTH} /> */}
       <Footer/>
     </>
   );

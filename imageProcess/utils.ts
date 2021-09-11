@@ -1,29 +1,4 @@
-const getAverageRgbFromImageData = ({ data }: ImageData) => {
-  let r = 0;
-  let g = 0;
-  let b = 0;
-
-  for (let i = 0, l = data.length; i < l; i += 4) {
-    r += data[i];
-    g += data[i + 1];
-    b += data[i + 2];
-  }
-
-  r = Math.floor(r / (data.length / 4));
-  g = Math.floor(g / (data.length / 4));
-  b = Math.floor(b / (data.length / 4));
-
-  return { r, g, b };
-};
-
-const convertRgbToHex = ({ r, g, b }: ReturnType<typeof getAverageRgbFromImageData>) => {
-  return ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-};
-
-export const getAverageHexCodeFromImageData = (imageData: ImageData) => {
-  const rgb = getAverageRgbFromImageData(imageData);
-  return convertRgbToHex(rgb);
-};
+export const MAX_IMAGE_WIDTH = 700;
 
 export const getTotalUnitsinXAndYAxis = (
   height: number,
@@ -32,53 +7,32 @@ export const getTotalUnitsinXAndYAxis = (
   tileWidth: number
 ) => {
   return {
-    xAxis: width / tileWidth,
-    yAxis: height / tileHeight,
+    xAxis: Math.ceil(width / tileWidth),
+    yAxis: Math.ceil(height / tileHeight),
   };
 };
 
-const getBestPossibleImageSizeUnit = (
-  imageHeightOrWidth: number,
-  maxHeightOrWidth: number,
-  tileHeightOrWidth: number
-) => {
-  if (imageHeightOrWidth > maxHeightOrWidth) {
-    return maxHeightOrWidth;
-  } else if (imageHeightOrWidth < maxHeightOrWidth) {
-    // Divide the image / tilehegiht
-    // if the remainder is 0
-    // use that height
-    // otherwise use the next closest possible height (which would be less than the image height resulting in cropped)
-    const remainder = imageHeightOrWidth % tileHeightOrWidth;
-    if (remainder === 0) {
-      return imageHeightOrWidth;
-    } else {
-      return imageHeightOrWidth - remainder;
-    }
+export const scaleAndConvertToImageElement = (image: ImageBitmap) => {
+  const newImageElement = new Image();
+
+  if (image.width > MAX_IMAGE_WIDTH) {
+    newImageElement.height = image.height * (MAX_IMAGE_WIDTH / image.width);
+    newImageElement.width = MAX_IMAGE_WIDTH;
   } else {
-    // image size and max size are the same
-    return imageHeightOrWidth;
+    newImageElement.height = image.height;
+    newImageElement.width = image.width;
   }
-};
 
-/**
- * A utility which has some built in logic to get the best appropriate dimensions for the canvas
- * @param tileWidth
- * @param tileHeight
- * @param imageHeight
- * @param imageWidth
- */
-export const getBestDimensionForImage = (
-  tileWidth: number,
-  tileHeight: number,
-  imageHeight: number,
-  imageWidth: number
-) => {
-  const maxHeight = tileHeight * 50;
-  const maxWidth = tileWidth * 50;
+  // Use a canvas to scale the image
+  const scalingCanvas = document.createElement('canvas');
+  scalingCanvas.width = newImageElement.width;
+  scalingCanvas.height = newImageElement.height;
 
-  return {
-    height: getBestPossibleImageSizeUnit(imageHeight, maxHeight, tileHeight),
-    width: getBestPossibleImageSizeUnit(imageWidth, maxWidth, tileWidth),
-  };
+  const scalingContext = scalingCanvas.getContext('2d');
+
+  if (scalingContext) {
+    scalingContext.drawImage(image, 0, 0, newImageElement.width, newImageElement.height);
+    newImageElement.src = scalingCanvas.toDataURL();
+    return newImageElement;
+  }
 };
