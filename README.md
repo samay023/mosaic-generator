@@ -15,6 +15,9 @@ The goal of this task is to implement the following flow in a Next.js applicatio
 
 ## Setup
 
+# Install the packages
+`npm install`
+
 # Run dev copy
-npm run dev
+`npm run dev`
 ```
