@@ -20,3 +20,7 @@ The goal of this task is to implement the following flow in a Next.js applicatio
 
 # Run dev copy
 `npm run dev`
+
+## View Project
+
+Visit https://mosaic-generator.vercel.app/ to get a preview of the app
