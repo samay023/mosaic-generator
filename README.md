@@ -1,5 +1,4 @@
-This app generates a mosaic image based on the image a user uploads.
-Built using NextJS, takes advantage of worker threads for a massive performance gain. 
+This app generates a mosaic image based on the image a user uploads. Built using NextJS, takes advantage of worker threads for a massive performance gain. 
 
 
 ## Setup
